@@ -1,0 +1,45 @@
+{
+ "key": "web3_rpc",
+ "description": "EVM JSON-RPC read call. Base Tenderly https://base.gateway.tenderly.co (WORKS, no key; getLogs max 1000 blocks/call); BSC https://bsc-dataseed.binance.org (WORKS); Optimism https://mainnet.optimism.io (WORKS). DEAD from our network, NEVER use: mainnet.base.org, base-rpc.publicnode.com, ethereum-rpc.publicnode.com, eth.llamarpc.com, rpc.ankr.com/eth, arb1.arbitrum.io/rpc, polygon-rpc.com, rpc.mainnet.chain.robinhood.com. Use for eth_chainId, eth_blockNumber, eth_getCode, eth_getStorageAt, eth_call, eth_getLogs, eth_getTransactionReceipt, eth_getBalance. Always pass params as a JSON array.",
+ "schema": {
+  "type": "object",
+  "required": [
+   "rpc_url",
+   "method",
+   "params"
+  ],
+  "properties": {
+   "method": {
+    "type": "string",
+    "description": "JSON-RPC method, e.g. eth_getCode, eth_call, eth_getLogs, eth_blockNumber."
+   },
+   "params": {
+    "type": "array",
+    "items": {},
+    "description": "JSON-RPC params array (use [] when the method takes none)."
+   },
+   "rpc_url": {
+    "type": "string",
+    "default": "https://base.gateway.tenderly.co",
+    "description": "JSON-RPC endpoint. Base Tenderly https://base.gateway.tenderly.co (WORKS, no key; getLogs max 1000 blocks/call); BSC https://bsc-dataseed.binance.org (WORKS); Optimism https://mainnet.optimism.io (WORKS). DEAD from our network, NEVER use: mainnet.base.org, base-rpc.publicnode.com, ethereum-rpc.publicnode.com, eth.llamarpc.com, rpc.ankr.com/eth, arb1.arbitrum.io/rpc, polygon-rpc.com, rpc.mainnet.chain.robinhood.com."
+   }
+  }
+ },
+ "agents": [
+  "worker",
+  "planner",
+  "mainagent",
+  "pentest"
+ ],
+ "enabled": true,
+ "kind": "http",
+ "exec": {
+  "url": "{rpc_url}",
+  "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"{method}\",\"params\":{params}}",
+  "method": "POST",
+  "headers": {
+   "Content-Type": "application/json"
+  },
+  "timeout_ms": 30000
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "key": "web3_pool_key",
+ "description": "Compute a Uniswap v4 PoolId = keccak256(abi.encode(currency0, currency1, fee, tickSpacing, hooks)) using cast. Pass address-sorted tokens (currency0 < currency1), fee as uint24 (e.g. 3000), tick_spacing as int24 (e.g. 60), and hooks address (use 0x0000000000000000000000000000000000000000 when the pool has no hook).",
+ "schema": {
+  "type": "object",
+  "required": [
+   "currency0",
+   "currency1",
+   "fee",
+   "tick_spacing",
+   "hooks"
+  ],
+  "properties": {
+   "fee": {
+    "type": "integer",
+    "description": "LP fee in hundredths of a bip, e.g. 3000."
+   },
+   "hooks": {
+    "type": "string",
+    "description": "Hook contract address, or 0x0000000000000000000000000000000000000000."
+   },
+   "currency0": {
+    "type": "string",
+    "description": "Lower-sorted token address."
+   },
+   "currency1": {
+    "type": "string",
+    "description": "Higher-sorted token address."
+   },
+   "tick_spacing": {
+    "type": "integer",
+    "description": "Tick spacing, e.g. 60."
+   }
+  }
+ },
+ "agents": [
+  "worker",
+  "planner",
+  "mainagent",
+  "pentest"
+ ],
+ "enabled": true,
+ "kind": "command",
+ "exec": {
+  "command": "cast keccak (cast abi-encode 'f(address,address,uint24,int24,address)' {currency0} {currency1} {fee} {tick_spacing} {hooks})",
+  "timeout_ms": 30000
+ }
+}

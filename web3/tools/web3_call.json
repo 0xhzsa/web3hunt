@@ -1,0 +1,42 @@
+{
+ "key": "web3_call",
+ "description": "Read-only EVM contract call via cast. Base Tenderly https://base.gateway.tenderly.co (WORKS, no key; getLogs max 1000 blocks/call); BSC https://bsc-dataseed.binance.org (WORKS); Optimism https://mainnet.optimism.io (WORKS). DEAD from our network, NEVER use: mainnet.base.org, base-rpc.publicnode.com, ethereum-rpc.publicnode.com, eth.llamarpc.com, rpc.ankr.com/eth, arb1.arbitrum.io/rpc, polygon-rpc.com, rpc.mainnet.chain.robinhood.com. Pass target, Solidity signature incl. return type, space-separated args, and rpc_url.",
+ "schema": {
+  "type": "object",
+  "required": [
+   "to",
+   "sig",
+   "args",
+   "rpc_url"
+  ],
+  "properties": {
+   "to": {
+    "type": "string"
+   },
+   "sig": {
+    "type": "string",
+    "description": "Solidity fn signature incl. return type, e.g. balanceOf(address)(uint256)"
+   },
+   "args": {
+    "type": "string",
+    "description": "Space-separated args (empty string if none)."
+   },
+   "rpc_url": {
+    "type": "string",
+    "default": "https://base.gateway.tenderly.co"
+   }
+  }
+ },
+ "agents": [
+  "worker",
+  "planner",
+  "mainagent",
+  "pentest"
+ ],
+ "enabled": true,
+ "kind": "command",
+ "exec": {
+  "command": "cast call {to} {sig} {args} --rpc-url {rpc_url}",
+  "timeout_ms": 30000
+ }
+}

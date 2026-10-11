@@ -1,0 +1,32 @@
+{
+ "key": "web3_trace",
+ "description": "Trace a transaction with cast run (needs archive node; Tenderly gateway is limited). Base Tenderly https://base.gateway.tenderly.co (WORKS, no key; getLogs max 1000 blocks/call); BSC https://bsc-dataseed.binance.org (WORKS); Optimism https://mainnet.optimism.io (WORKS). DEAD from our network, NEVER use: mainnet.base.org, base-rpc.publicnode.com, ethereum-rpc.publicnode.com, eth.llamarpc.com, rpc.ankr.com/eth, arb1.arbitrum.io/rpc, polygon-rpc.com, rpc.mainnet.chain.robinhood.com.",
+ "schema": {
+  "type": "object",
+  "required": [
+   "txhash",
+   "rpc_url"
+  ],
+  "properties": {
+   "txhash": {
+    "type": "string"
+   },
+   "rpc_url": {
+    "type": "string",
+    "default": "https://base.gateway.tenderly.co"
+   }
+  }
+ },
+ "agents": [
+  "worker",
+  "planner",
+  "mainagent",
+  "pentest"
+ ],
+ "enabled": true,
+ "kind": "command",
+ "exec": {
+  "command": "cast run {txhash} --rpc-url {rpc_url} -vvvv",
+  "timeout_ms": 120000
+ }
+}

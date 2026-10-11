@@ -1,0 +1,32 @@
+{
+ "key": "web3_explorer",
+ "description": "Fetch contract source/ABI/metadata (GET full URL). PREFER Sourcify https://repo.sourcify.dev/contracts/full_match/<chainid>/<addr>/ (open, no key). Blockscout v2 API is Cloudflare-blocked (403) from our network \u2014 use the browser tool instead. Etherscan v2 needs an API key. See skill reference/chains-rpcs-explorers.md.",
+ "schema": {
+  "type": "object",
+  "required": [
+   "url"
+  ],
+  "properties": {
+   "url": {
+    "type": "string",
+    "description": "Full explorer API URL to GET."
+   }
+  }
+ },
+ "agents": [
+  "worker",
+  "planner",
+  "mainagent",
+  "pentest"
+ ],
+ "enabled": true,
+ "kind": "http",
+ "exec": {
+  "url": "{url}",
+  "method": "GET",
+  "headers": {
+   "Accept": "application/json"
+  },
+  "timeout_ms": 30000
+ }
+}

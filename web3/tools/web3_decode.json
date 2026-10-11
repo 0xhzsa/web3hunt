@@ -1,0 +1,28 @@
+{
+ "key": "web3_decode",
+ "description": "Decode 4-byte selector + args (cast 4byte-decode <calldata>). Also resolves a bare selector via cast 4byte. Use on unknown calldata from a target's transactions.",
+ "schema": {
+  "type": "object",
+  "required": [
+   "calldata"
+  ],
+  "properties": {
+   "calldata": {
+    "type": "string",
+    "description": "Raw calldata hex (0x...) or a 4-byte selector."
+   }
+  }
+ },
+ "agents": [
+  "worker",
+  "planner",
+  "mainagent",
+  "pentest"
+ ],
+ "enabled": true,
+ "kind": "command",
+ "exec": {
+  "command": "cast 4byte-decode {calldata}",
+  "timeout_ms": 30000
+ }
+}

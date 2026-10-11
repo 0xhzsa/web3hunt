@@ -1,0 +1,37 @@
+{
+ "key": "web3_storage",
+ "description": "Read a raw storage slot via cast. Base Tenderly https://base.gateway.tenderly.co (WORKS, no key; getLogs max 1000 blocks/call); BSC https://bsc-dataseed.binance.org (WORKS); Optimism https://mainnet.optimism.io (WORKS). DEAD from our network, NEVER use: mainnet.base.org, base-rpc.publicnode.com, ethereum-rpc.publicnode.com, eth.llamarpc.com, rpc.ankr.com/eth, arb1.arbitrum.io/rpc, polygon-rpc.com, rpc.mainnet.chain.robinhood.com. EIP-1967 impl slot = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a9c30c58fd9bf.",
+ "schema": {
+  "type": "object",
+  "required": [
+   "address",
+   "slot",
+   "rpc_url"
+  ],
+  "properties": {
+   "slot": {
+    "type": "string",
+    "description": "Storage slot hex (e.g. 0x0)."
+   },
+   "address": {
+    "type": "string"
+   },
+   "rpc_url": {
+    "type": "string",
+    "default": "https://base.gateway.tenderly.co"
+   }
+  }
+ },
+ "agents": [
+  "worker",
+  "planner",
+  "mainagent",
+  "pentest"
+ ],
+ "enabled": true,
+ "kind": "command",
+ "exec": {
+  "command": "cast storage {address} {slot} --rpc-url {rpc_url}",
+  "timeout_ms": 30000
+ }
+}

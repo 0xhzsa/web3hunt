@@ -1,0 +1,24 @@
+[
+ {
+  "name": "web3-pickle",
+  "format": "openai",
+  "base_url": "http://127.0.0.1:4030/v1",
+  "model": "opencode/big-pickle",
+  "api_key": "local",
+  "rate_per_second": 2,
+  "rate_per_minute": 90,
+  "context_window_k": 256,
+  "streaming": true
+ },
+ {
+  "name": "web3-spacebunny",
+  "format": "openai",
+  "base_url": "http://127.0.0.1:4030/v1",
+  "model": "opencode/space-bunny-free",
+  "api_key": "local",
+  "rate_per_second": 2,
+  "rate_per_minute": 90,
+  "context_window_k": 256,
+  "streaming": true
+ }
+]
