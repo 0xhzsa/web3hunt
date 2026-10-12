@@ -20,5 +20,29 @@
   "rate_per_minute": 90,
   "context_window_k": 256,
   "streaming": true
+ },
+ {
+  "name": "web3-stepfun",
+  "format": "openai",
+  "base_url": "http://127.0.0.1:8645/v1",
+  "model": "stepfun/step-5-preview:free",
+  "api_key": "local",
+  "rate_per_second": 1,
+  "rate_per_minute": 30,
+  "context_window_k": 128,
+  "streaming": true,
+  "note": "proven healthy; use when :4030 free tier stalls (zero-token calls)"
+ },
+ {
+  "name": "web3-poolside",
+  "format": "openai",
+  "base_url": "http://127.0.0.1:8645/v1",
+  "model": "poolside/laguna-s-2.1:free",
+  "api_key": "local",
+  "rate_per_second": 1,
+  "rate_per_minute": 30,
+  "context_window_k": 128,
+  "streaming": true,
+  "note": "failover for stepfun"
  }
 ]
