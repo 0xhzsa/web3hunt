@@ -98,6 +98,7 @@ Operational per-class checks (beyond hooks — flash loans, MEV, bridges, bounty
 mapping): `reference/bug-catalog.md`.
 Bounty intake (scope → triage → report): `reference/bounty-intake.md`.
 Rescue ops (fork reclaim PoC, disclosure, standing vault): `reference/rescue-ops.md`.
+Proven fork recipes (replay, origin/donation/sender parity, settlement debugging): `reference/fork-patterns.md`.
 
 ## Step 3 — Confirm on a fork (proof, not suspicion)
 
@@ -138,6 +139,7 @@ references for every code claim.
 - `web3_explorer` — GET a block-explorer API URL for verified source/ABI/metadata (Blockscout v2,
   Etherscan v2, Sourcify). See `reference/chains-rpcs-explorers.md`.
 - `web3_pool_key` — compute a Uniswap v4 PoolId (currency0/currency1/fee/tickSpacing/hooks).
+- `web3_disasm` — disassemble runtime bytecode, harvest + resolve function selectors (script tool, no deps). Run FIRST on every unverified target to fingerprint admin/fee/upgrade functions.
 
 ## References
 
