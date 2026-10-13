@@ -74,7 +74,22 @@ check what ARRIVED not what burned; permission-bit vs declared mismatch;
 donation/direct-call bypass; accounting drift. Canon: Cork ($12M), GPXHooks
 ($115K). Full notes: `reference/v4-hooks.md`.
 
+## Probing discipline (mandatory — learned 2026-10-12)
+
+`eth_call` against public gateways can return `result: "0x"` for calls that
+actually REVERT without a message — indistinguishable from a successful void
+call. A bare `revert()`/message-less guard looks like success. NEVER declare a
+permissionless path open on an `eth_call` alone:
+- Re-verify EVERY candidate open function by executing it on a fork (anvil or
+  `forge test` with prank): success must change state or emit the expected
+  events; a revert there kills the candidate no matter what `eth_call` said.
+- Canonical near-miss: hook `mint(address,uint256,uint256)` returned `0x` via
+  gateway `eth_call` for a stranger EOA, but reverted on fork execution — the
+  function is guarded, not open. Without the fork check this would have been a
+  false critical.
+
 ## Disposition
+
 Fork PASS + asserted value movement = finding (map to bounty scale or
 disclosure). Anything else = hypothesis. Negative results report coverage,
 fork blocks, and remaining unknowns.
