@@ -99,6 +99,7 @@ mapping): `reference/bug-catalog.md`.
 Bounty intake (scope → triage → report): `reference/bounty-intake.md`.
 Rescue ops (fork reclaim PoC, disclosure, standing vault): `reference/rescue-ops.md`.
 Proven fork recipes (replay, origin/donation/sender parity, settlement debugging): `reference/fork-patterns.md`.
+International alpha (CN/KR-led incident intel → transferable technique, DeFiHackLabs/KelpDAO shapes): `reference/intel-alpha.md`.
 
 ## Step 3 — Confirm on a fork (proof, not suspicion)
 
