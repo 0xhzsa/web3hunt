@@ -1,0 +1,34 @@
+{
+ "key": "web3_disasm",
+ "description": "Disassemble EVM runtime bytecode and list function selectors (dep-free linear sweep). Pass a contract address + rpc_url; it fetches code, harvests PUSH4 selectors, resolves names via openchain. Use FIRST on any unverified target to fingerprint admin/fee/upgrade functions (setFee, mint, pause, upgradeTo). Base default https://base.gateway.tenderly.co. Selectors marked ? need manual review.",
+ "schema": {
+  "type": "object",
+  "required": [
+   "address",
+   "rpc_url"
+  ],
+  "properties": {
+   "address": {
+    "type": "string",
+    "description": "Contract address."
+   },
+   "rpc_url": {
+    "type": "string",
+    "default": "https://base.gateway.tenderly.co",
+    "description": "Chain RPC URL."
+   }
+  }
+ },
+ "agents": [
+  "worker",
+  "planner",
+  "mainagent",
+  "pentest"
+ ],
+ "enabled": true,
+ "kind": "script",
+ "exec": {
+  "code": "# -*- coding: utf-8 -*-\n\"\"\"web3_disasm tool code (pure stdlib): bytecode -> PUSH4 selectors, resolved.\"\"\"\nimport json\nimport sys\nimport urllib.request\n\nPUSH_BASE = 0x60\n\n\ndef rpc(rpc_url, method, params):\n    body = json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': method, 'params': params}).encode()\n    r = urllib.request.Request(rpc_url, data=body, headers={'Content-Type': 'application/json'})\n    with urllib.request.urlopen(r, timeout=60) as x:\n        out = json.loads(x.read().decode())\n    if 'error' in out:\n        raise RuntimeError(str(out['error'])[:200])\n    return out['result']\n\n\ndef harvest(code):\n    sels = set()\n    i = 2 if code.startswith('0x') else 0\n    n = len(code)\n    while i < n:\n        op = int(code[i:i + 2], 16)\n        if PUSH_BASE <= op <= 0x7f:\n            w = op - PUSH_BASE + 1\n            if op == 0x63 and i + 2 + 8 <= n:\n                sels.add('0x' + code[i + 2:i + 10].lower())\n            i += 2 + w * 2\n        else:\n            i += 2\n    return sorted(sels)\n\n\ndef resolve(sels):\n    out = {}\n    for i in range(0, len(sels), 20):\n        batch = sels[i:i + 20]\n        q = 'https://api.openchain.xyz/signature-database/v1/lookup?function=' + ','.join(batch)\n        try:\n            r = urllib.request.Request(q, headers={'User-Agent': 'Mozilla/5.0'})\n            with urllib.request.urlopen(r, timeout=30) as x:\n                d = json.loads(x.read().decode()).get('result', {}).get('function', {})\n            for s in batch:\n                hits = d.get(s) or d.get(s.lower()) or []\n                out[s] = [h['name'] for h in hits][:3]\n        except Exception as e:\n            for s in batch:\n                out.setdefault(s, [])\n    return out\n\n\ndef main():\n    p = json.load(sys.stdin)\n    addr = p['address']\n    rpc_url = p.get('rpc_url') or 'https://base.gateway.tenderly.co'\n    code = rpc(rpc_url, 'eth_getCode', [addr, 'latest'])\n    size = (len(code) - 2) // 2\n    print('address: %s' % addr)\n    print('code bytes: %d' % size)\n    if size == 0:\n        print('EMPTY (EOA or wrong chain)')\n        return\n    sels = harvest(code)\n    print('PUSH4 selectors: %d' % len(sels))\n    res = resolve(sels)\n    for s in sels:\n        names = res.get(s) or ['?']\n        print('  %s  %s' % (s, ' | '.join(names)))\n\n\nmain()\n",
+  "timeout_ms": 120000
+ }
+}
