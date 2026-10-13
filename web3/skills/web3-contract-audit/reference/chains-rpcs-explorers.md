@@ -34,6 +34,13 @@ QuickNode) or `forge test --fork-url` with an archive URL.
 - `Initialize` topic0: `0xdd466e674ea557f56295e2d0218a125ea4b4f0f6f3307b95f85e6110838d6438` (non-indexed data: fee[0:64] tickSpacing[64:128] **hooks[128:192]** sqrtPrice[192:256] tick[256:320] — hook address is the LAST 20 bytes of the third word).
 - `Swap` topic0: `0x40e9cecb9f5f1f1c5b9c97dec2917b7ee92e57ba5563708daca94dd84ad7112f`.
 - `getHookPermissions()` selector: `0xc4e833ce`.
+- Tenderly gateway quirks (verified 2026-10-12, all cost worker turns to learn):
+  `eth_getCode` can return `0xef` for a live contract (cross-check with a view
+  call); `trace_call`/`debug_traceCall` exist but 429 under any load — design
+  tests around logs + return values; anvil forks work but EVERY launch spawns a
+  process — kill stale `anvil` before each run; agent shell is PowerShell
+  (`;` chains, no `&&`) and foundry is NOT on PATH (full path
+  `C:\Users\stagh\.foundry\bin` or prepend per command).
 
 ## Useful cast verbs
 - `cast code <addr> --rpc-url <RPC>` — runtime bytecode.
